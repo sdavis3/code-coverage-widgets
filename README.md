@@ -1,4 +1,4 @@
-#Code Coverage Dashboard Widgets# 
+#Code Coverage Dashboard Widgets
 This repository contains a collection of [Visual Studio Team Services (VSTS)](https://www.visualstudio.com/en-us/products/visual-studio-team-services-vs.aspx) 
 dashboard widgets that can be used to extract unit test code coverage metrics right into your VSTS dashboard.
 

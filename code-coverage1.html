@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="sdk/scripts/VSS.SDK.min.js"></script>
+        <script type="text/javascript">
+            VSS.init({
+                explicitNotifyLoaded: true,
+                usePlatformStyles: true,
+                usePlatformScripts: true
+            });
+
+            VSS.require(["TFS/Dashboards/WidgetHelpers", "TFS/Build/RestClient", "TFS/TestManagement/RestClient"], 
+            function (WidgetHelpers, TFS_Build_WebApi, TFS_TestMgmt_WebApi) {
+                WidgetHelpers.IncludeWidgetStyles();
+                // TODO: The following line may need VSS.ready() instead. Need to test.
+                VSS.register("CodeCoverageWidget1", function () {
+                    var projectId = VSS.getWebContext().project.id;
+                    var getBuildBuildInfo = function (widgetSettings) {
+                        var settings = JSON.parse(widgetSettings.customSettings.data);
+                        if (!settings || !settings.buildDefinition) {
+                            
+                            // Initialize display values
+                            $("#init-label").show();
+                            $("div.big-count").hide();
+                            $("#percent-label").hide();
+
+                            return WidgetHelpers.WidgetStatusHelper.Success()
+                        }
+
+                        // Get most recent successful build details
+                        // TODO: Implement fallback logic as 1 could return mixed results in older vs. new APIs
+                        TFS_Build_WebApi.getClient().getBuilds(projectId, [parseInt(settings.buildDefinition)], null, null, null, null, null, null, "Completed", "Succeeded", null, null, null, 1)
+                            .then(function (query2) {
+                                // Populate dropdown with list of recent builds     
+                                $.each(query2, function(key, value) {
+                                    var buildId = value.id;                                   
+                                    // Get code coverage summary for most recent build
+                                    TFS_TestMgmt_WebApi.getClient().getCodeCoverageSummary(projectId, buildId)
+                                        .then(function (query3) {
+                                            // Evaluate for where there is no coverage data                                        
+                                            if (query3.coverageData[0]) {
+                                                // Filter for line coverage data
+                                                var coverageData = query3.coverageData[0].coverageStats.filter(function (el) {
+                                                    return el.label == "Lines" ||
+                                                           el.label == "Line";
+                                                });
+                                                
+                                                // Iterate and count code coverage items
+                                                var totalLines = 0;
+                                                var linesCovered = 0;
+                                                var coveragePct = 0;
+                                                $.each(coverageData, function(key, value) {
+                                                    totalLines += value.total;
+                                                    linesCovered += value.covered;
+                                                });
+
+                                                // Calculate code coverage percentage
+                                                // This check avoids divide by zero error
+                                                if (totalLines > 0) {
+                                                    coveragePct = Math.round((linesCovered / totalLines) * 100);
+                                                }
+
+                                                // Update UI with code coverage percentage
+                                                $("div.big-count").text(coveragePct);
+                                                $("div.big-count").show();
+                                                $("#percent-label").show();
+                                                $("#init-label").hide();
+                                            }
+                                            else {
+                                                // Set display values for no coverage data
+                                                $("div.big-count").hide();
+                                                $("#percent-label").hide();
+                                                $("#init-label").text("No code coverage details found for this build definition");
+                                                $("#init-label").show();
+                                            }
+                                        });
+                                });
+                            });
+                        
+                        // Get a client to make REST calls to VSTS
+                        return TFS_Build_WebApi.getClient().getDefinition(settings.buildDefinition, projectId)
+                            .then(function (query) {                              
+                                // Update title
+                                $("h2.title").text(settings.name);
+
+                                // Use the widget helper and return success as Widget Status
+                                return WidgetHelpers.WidgetStatusHelper.Success();
+                            }, function (error) {
+                                // Use the widget helper and return failure as Widget Status
+                                return WidgetHelpers.WidgetStatusHelper.Failure(error.message);
+                            });
+                    }
+
+                    return {
+                        load: function (widgetSettings) {
+                            // Set title
+                            $("h2.title").text(widgetSettings.name);
+
+                            return getBuildBuildInfo(widgetSettings);
+                        },
+                        reload: function (widgetSettings) {
+                            // Set title
+                            $("h2.title").text(widgetSettings.name);
+
+                            return getBuildBuildInfo(widgetSettings);
+                        }
+                    }
+                });
+                VSS.notifyLoadSucceeded();
+            });
+        </script>
+    </head>
+    <body>
+        <div class="widget">
+            <h2 class="title"></h2>
+            <label id="init-label" hidden>No build definition selected</label>
+            <div class="big-count" hidden></div>
+            <label id="percent-label" hidden>Percent</label>
+        </div>
+    </body>
+</html>

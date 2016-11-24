@@ -1,0 +1,111 @@
+{
+    "manifestVersion": 1,
+    "id": "code-coverage-dashboard-widgets",
+    "version": "1.0.98",
+    "name": "Code Coverage Widgets",
+    "description": "A collection of dashboard widgets for displaying code coverage in VSTS.",
+    "publisher": "shanebdavis",
+    "icons": {
+        "default": "img/logo.png"
+    },
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "tags": [
+        "code coverage",
+        "widgets",
+        "dashboard"
+    ],
+    "screenshots": [
+        {
+            "path": "img/screenshots/widgets.png"
+        },
+        {
+            "path": "img/screenshots/configuration.png"
+        }
+    ],
+    "content": {
+        "details": {
+            "path": "overview.md"
+        }
+    },
+    "links": {
+        "getstarted": {
+            "uri": "https://github.com/sdavis3/CodeCoverageDashboardWidgets"
+        },
+        "learn": {
+            "uri": "https://github.com/sdavis3/CodeCoverageDashboardWidgets"
+        },
+        "license": {
+            "uri": "https://github.com/sdavis3/CodeCoverageDashboardWidgets"
+        },
+        "support": {
+            "uri": "https://github.com/sdavis3/CodeCoverageDashboardWidgets"
+        }
+    },
+    "branding": {
+        "color": "006552",
+        "theme": "light"
+    },
+    "categories": [
+        "Test"
+    ],
+    "contributions": [
+        {
+             "id": "CodeCoverageWidget1",
+             "type": "ms.vss-dashboards-web.widget",
+             "targets": [
+                 "ms.vss-dashboards-web.widget-catalog",
+                 "shanebdavis.code-coverage-dashboard-widgets.CodeCoverageWidget.Configuration"
+             ],
+             "properties": {
+                 "name": "Code Coverage",
+                 "description": "Displays the percentage of code coverage for a build definition.",
+                 "catalogIconUrl": "img/CatalogIcon.png",
+                 "previewImageUrl": "img/preview1.png",                       
+                 "uri": "code-coverage1.html",
+                 "isNameConfigurable": true,
+                 "supportedSizes": [
+                    {
+                        "rowSpan": 1,
+                        "columnSpan": 1
+                    }
+                 ],
+                 "supportedScopes": ["project_team"]
+             }
+         },
+         {
+             "id": "CodeCoverageWidget.Configuration",
+             "type": "ms.vss-dashboards-web.widget-configuration",
+             "targets": [ "ms.vss-dashboards-web.widget-configuration" ],
+             "properties": {
+                 "name": "Code Coverage Configuration",
+                 "description": "Configures CodeCoverageWidget1",
+                 "uri": "configuration.html"
+             }
+         }
+    ],
+    "files": [
+        {
+            "path": "code-coverage1.html", "addressable": true
+        },
+        {
+            "path": "configuration.html", "addressable": true
+        },
+        {
+            "path": "sdk/scripts", "addressable": true
+        },
+        {
+            "path": "img", "addressable": true
+        }
+    ],
+    "galleryFlags": [
+        "Preview"
+    ],
+    "scopes": [
+        "vso.build",
+        "vso.test"
+    ]
+}

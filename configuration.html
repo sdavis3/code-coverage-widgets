@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <script src="sdk/scripts/VSS.SDK.min.js"></script>
+        <script type="text/javascript">
+            VSS.init({
+                explicitNotifyLoaded: true,
+                usePlatformStyles: true,
+                usePlatformScripts: true
+            });
+
+            VSS.require(["TFS/Dashboards/WidgetHelpers", "TFS/Build/RestClient"], 
+            function (WidgetHelpers, TFS_Build_WebApi) {
+                // TODO: The following line may need VSS.ready() instead. Need to test.
+                VSS.register("CodeCoverageWidget.Configuration", function () {
+                    var projectId = VSS.getWebContext().project.id;
+                    var $buildDefinitionDropdown = $("#build-definition-dropdown");
+
+                    TFS_Build_WebApi.getClient().getDefinitions(projectId)
+                        .then(function (query) {
+                       
+                            // Populate dropdown with list of build definitions     
+                            $.each(query, function(key, value) {
+                                $buildDefinitionDropdown.append($("<option />").val(value.id).text(value.name));
+                            });
+
+                            // Use the widget helper and return success as Widget Status
+                            return WidgetHelpers.WidgetStatusHelper.Success();
+                        }, function (error) {
+                            // Use the widget helper and return failure as Widget Status
+                            return WidgetHelpers.WidgetStatusHelper.Failure(error.message);
+                        });
+
+                    return {
+                        load: function (widgetSettings, widgetConfigurationContext) {
+                            var settings = JSON.parse(widgetSettings.customSettings.data);
+                            if (settings && settings.buildDefinition) {
+                                $buildDefinitionDropdown.val(settings.buildDefinition);
+                            }
+
+                            $buildDefinitionDropdown.on("change", function () {
+                                var customSettings = {
+                                    data: JSON.stringify({
+                                        buildDefinition: $buildDefinitionDropdown.val()
+                                    })
+                                };
+                                var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
+                                var eventArgs = WidgetHelpers.WidgetEvent.Args(customSettings);
+                                widgetConfigurationContext.notify(eventName, eventArgs);
+                            });
+
+                            return WidgetHelpers.WidgetStatusHelper.Success();
+                        },
+                        onSave: function() {
+                            var customSettings = {
+                                data: JSON.stringify({
+                                    buildDefinition: $buildDefinitionDropdown.val()
+                                })
+                            };
+                            return WidgetHelpers.WidgetConfigurationSave.Valid(customSettings);
+                        }
+                    }
+                });
+                VSS.notifyLoadSucceeded();
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <fieldset>
+                <label class="label">Build Definition: </label>
+                <select id="build-definition-dropdown" style="margin-top:10px">
+                    <option value="" selected disabled hidden>Please select a build definition</option>
+                </select>
+            </fieldset>
+        </div>
+    </body>
+</html>

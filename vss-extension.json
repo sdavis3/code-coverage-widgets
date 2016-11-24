@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "code-coverage-dashboard-widgets",
-    "version": "1.0.98",
+    "version": "1.0.99",
     "name": "Code Coverage Widgets",
     "description": "A collection of dashboard widgets for displaying code coverage in VSTS.",
     "publisher": "shanebdavis",

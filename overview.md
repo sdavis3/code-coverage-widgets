@@ -13,7 +13,7 @@ The following configuration options are available:
 
 ![](img/screenshots/configuration.png)
 
-* **Name** - Name of the widget as it is displayed on the dashboard.
+* **Title** - Title of the widget as it is displayed on the dashboard.
 * **Build Definition** - Choose the build definition you want code coverage displayed for on the widget.
 
 ## Known Issues

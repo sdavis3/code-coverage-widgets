@@ -17,13 +17,11 @@
                     var projectId = VSS.getWebContext().project.id;
                     var getBuildBuildInfo = function (widgetSettings) {
                         var settings = JSON.parse(widgetSettings.customSettings.data);
-                        if (!settings || !settings.buildDefinition) {
-                            
+                        if (!settings || !settings.buildDefinition) {                      
                             // Initialize display values
                             $("#init-label").show();
                             $("div.big-count").hide();
                             $("#percent-label").hide();
-
                             return WidgetHelpers.WidgetStatusHelper.Success()
                         }
 
@@ -59,7 +57,7 @@
                                                 if (totalLines > 0) {
                                                     coveragePct = Math.round((linesCovered / totalLines) * 100);
                                                 }
-
+                                                
                                                 // Update UI with code coverage percentage
                                                 $("div.big-count").text(coveragePct);
                                                 $("div.big-count").show();

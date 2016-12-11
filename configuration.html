@@ -48,6 +48,7 @@
                             // If a build definition has been previously selected, set the dropdown value
                             if (settings && settings.buildDefinition) {
                                 console.log('load settings.buildDefinition = ' + settings.buildDefinition);
+                                // TODO: the line below does not seem to work. It should set the value.
                                 $buildDefinitionDropdown.val(settings.buildDefinition);
                             }
                             // If a different definition is selected, prepare to persist the new definition

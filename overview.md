@@ -1,6 +1,8 @@
 #Visual Studio Team Services Code Coverage Widgets#
 
 ## Release Notes
+* 1.0.119
+    * Build definitions are now sorted alphabetically.
 * 1.0.99
     * Initial release. Includes a single widget that extracts "Line" (.NET) or "Lines" (Java) code coverage results from unit tests executed during a build.
 

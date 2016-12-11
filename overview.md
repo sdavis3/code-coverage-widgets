@@ -1,6 +1,8 @@
 #Visual Studio Team Services Code Coverage Widgets#
 
 ## Release Notes
+* 1.0.122
+    * Widget can now be resized to one or two columns in width.
 * 1.0.119
     * Build definitions are now sorted alphabetically.
 * 1.0.99

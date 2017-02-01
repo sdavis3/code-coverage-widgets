@@ -25,13 +25,24 @@
                             return WidgetHelpers.WidgetStatusHelper.Success()
                         }
 
+                        if (settings && settings.checkOptionBuildName == true) {
+                            // Show build name
+                            $("#build-name").show();
+                            //console.log('Show. settings.checkOptionBuildName = ' + settings.checkOptionBuildName);
+                        }
+                        else {
+                            // Hide build name
+                            $("#build-name").hide();
+                            //console.log('Hide. settings.checkOptionBuildName = ' + settings.checkOptionBuildName);
+                        }
+
                         // Get most recent successful build details
-                        // TODO: Implement fallback logic as 1 could return mixed results in older vs. new APIs
                         TFS_Build_WebApi.getClient().getBuilds(projectId, [parseInt(settings.buildDefinition)], null, null, null, null, null, null, "Completed", "Succeeded", null, null, null, 1)
                             .then(function (query2) {
                                 // Populate dropdown with list of recent builds     
                                 $.each(query2, function(key, value) {
-                                    var buildId = value.id;                                   
+                                    var buildId = value.id; 
+
                                     // Get code coverage summary for most recent build
                                     TFS_TestMgmt_WebApi.getClient().getCodeCoverageSummary(projectId, buildId)
                                         .then(function (query3) {
@@ -57,12 +68,16 @@
                                                 if (totalLines > 0) {
                                                     coveragePct = Math.round((linesCovered / totalLines) * 100);
                                                 }
+
+                                                // Fetch build name
+                                                var buildName = query3.build.name;
                                                 
                                                 // Update UI with code coverage percentage
                                                 $("div.big-count").text(coveragePct);
                                                 $("div.big-count").show();
                                                 $("#percent-label").show();
                                                 $("#init-label").hide();
+                                                $("#build-name").text(buildName);
                                             }
                                             else {
                                                 // Set display values for no coverage data
@@ -70,6 +85,7 @@
                                                 $("#percent-label").hide();
                                                 $("#init-label").text("No code coverage details found for this build definition");
                                                 $("#init-label").show();
+                                                $("#build-name").text("");
                                             }
                                         });
                                 });
@@ -114,6 +130,7 @@
             <label id="init-label" hidden>No build definition selected</label>
             <div class="big-count" hidden></div>
             <label id="percent-label" hidden>Percent</label>
+            <div id="build-name" class="subtitle"></label>
         </div>
     </body>
 </html>

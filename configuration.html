@@ -13,49 +13,82 @@
             function (WidgetHelpers, TFS_Build_WebApi) {
                 // TODO: The following line may need VSS.ready() instead. Need to test.
                 VSS.register("CodeCoverageWidget.Configuration", function () {
+                    WidgetHelpers.IncludeWidgetConfigurationStyles();
+
                     var projectId = VSS.getWebContext().project.id;
                     var $buildDefinitionDropdown = $("#build-definition-dropdown");
-
-                    TFS_Build_WebApi.getClient().getDefinitions(projectId)
-                        .then(function (query) {
-                       
-                            // Populate dropdown with list of build definitions     
-                            $.each(query, function(key, value) {
-                                $buildDefinitionDropdown.append($("<option />").val(value.id).text(value.name));
-                            });
-
-                            // Sort dropdown list of build definitions alphabetical                       
-                            $('#build-definition-dropdown').html($('#build-definition-dropdown' + ' option').sort(function(a, b) {
-                                return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
-                            }));
-
-                            // Set the Please select... item as the default
-                            $('#build-definition-dropdown').prepend($('<option />').val('').text('Please select a build definition:'));
-                            $('#build-definition-dropdown').val('');
-                            $("#build-definition-dropdown option[value='']").attr("disabled", true);
-
-                            // Use the widget helper and return success as Widget Status
-                            return WidgetHelpers.WidgetStatusHelper.Success();
-                        }, function (error) {
-                            // Use the widget helper and return failure as Widget Status
-                            return WidgetHelpers.WidgetStatusHelper.Failure(error.message);
-                        });
+                    var $checkOptionBuildName = $("#check-option-build-name");
 
                     return {
                         load: function (widgetSettings, widgetConfigurationContext) {
                             // Retrieve configurations settings
                             var settings = JSON.parse(widgetSettings.customSettings.data);
-                            // If a build definition has been previously selected, set the dropdown value
-                            if (settings && settings.buildDefinition) {
-                                console.log('load settings.buildDefinition = ' + settings.buildDefinition);
-                                // TODO: the line below does not seem to work. It should set the value.
-                                $buildDefinitionDropdown.val(settings.buildDefinition);
+                        
+                            TFS_Build_WebApi.getClient().getDefinitions(projectId)
+                        .then(function (query) {
+                                
+                                // Populate dropdown with list of build definitions     
+                                $.each(query, function(key, value) {
+                                    $buildDefinitionDropdown.append($("<option />").val(value.id).text(value.name));
+                                });
+                                //onsole.log('populated dropdown with list of build definitions.');
+
+                                // Sort dropdown list of build definitions alphabetically                     
+                                $('#build-definition-dropdown').html($('#build-definition-dropdown' + ' option').sort(function(a, b) {
+                                    return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
+                                }));
+                                //console.log('sorted dropdown list of build definitions alphabetically.');
+                                
+                                // If a build definition has been previously selected, set the dropdown value
+                                if (settings && settings.buildDefinition) {
+                                    //console.log('load settings.buildDefinition = ' + settings.buildDefinition);
+                                    // TODO: the line below does not seem to work. It should set the value.
+                                    $buildDefinitionDropdown.val(settings.buildDefinition).trigger("chosen:updated");
+                                    //console.log('set the dropdown value because a build definition was previously selected.');
+                                }
+                                else {
+                                    // Set the Please select... item as the default
+                                    $('#build-definition-dropdown').prepend($('<option />').val('').text('Please select a build definition:'));
+                                    $('#build-definition-dropdown').val('');
+                                    $("#build-definition-dropdown option[value='']").attr("disabled", true);
+                                    //console.log('set the pease select... item as the default.');
+                                }
+
+                                // Use the widget helper and return success as Widget Status
+                                return WidgetHelpers.WidgetStatusHelper.Success();
+                            }, function (error) {
+                                // Use the widget helper and return failure as Widget Status
+                                return WidgetHelpers.WidgetStatusHelper.Failure(error.message);
+                            });
+
+                            // If show build name has been previously selected, set the checkbox value
+                            if (settings && settings.checkOptionBuildName == true) {
+                                //console.log('load settings.checkOptionBuildName = ' + settings.checkOptionBuildName);
+                                $checkOptionBuildName.prop('checked', true);
+                            } 
+                            // Otherwise, mark the box as unchecked
+                            else {
+                                $checkOptionBuildName.prop('checked', false);
                             }
-                            // If a different definition is selected, prepare to persist the new definition
+                            
+                            // If a build definition change has been made, prepare to persist the new values
                             $buildDefinitionDropdown.on("change", function () {
                                 var customSettings = {
                                     data: JSON.stringify({
-                                        buildDefinition: $buildDefinitionDropdown.val()
+                                        buildDefinition: $buildDefinitionDropdown.val(),
+                                        checkOptionBuildName: $checkOptionBuildName.prop('checked') 
+                                    })
+                                };
+                                var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
+                                var eventArgs = WidgetHelpers.WidgetEvent.Args(customSettings);
+                                widgetConfigurationContext.notify(eventName, eventArgs);
+                            });
+                            // If a show build name change has been made, prepare to persist the new values
+                            $checkOptionBuildName.on("change", function () {
+                                var customSettings = {
+                                    data: JSON.stringify({
+                                        buildDefinition: $buildDefinitionDropdown.val(),
+                                        checkOptionBuildName: $checkOptionBuildName.prop('checked')
                                     })
                                 };
                                 var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
@@ -67,10 +100,12 @@
                         },
                         onSave: function() {
                             // Persist the selected definition
-                            console.log('onSave buildDefinition = ' + $buildDefinitionDropdown.val());
+                            //console.log('onSave buildDefinition = ' + $buildDefinitionDropdown.val());
+                            //console.log('onSave checkOptionBuildName = ' + $checkOptionBuildName.prop('checked'));
                             var customSettings = {
                                 data: JSON.stringify({
-                                    buildDefinition: $buildDefinitionDropdown.val()
+                                    buildDefinition: $buildDefinitionDropdown.val(),
+                                    checkOptionBuildName: $checkOptionBuildName.prop('checked')
                                 })
                             };
                             return WidgetHelpers.WidgetConfigurationSave.Valid(customSettings);
@@ -82,13 +117,23 @@
         </script>
     </head>
     <body>
-        <div class="container">
-            <fieldset>
-                <label class="label">Build Definition: </label>
-                <select id="build-definition-dropdown" style="margin-top:10px">
-                   <!-- <option value="" selected disabled>Please select a build definition</option>-->
-                </select>
-            </fieldset>
+        <div class="widget-configuration">
+
+            <div class="dropdown">
+                <label>Build Definition</label>
+                <div class="wrapper">
+                    <select id="build-definition-dropdown">                        
+                        <!--<option value="Shared Queries/Feedback">Shared Queries/Feedback</option>-->                                                 
+                    </select>
+                </div>
+                
+                <fieldset class="checkbox">
+                    <legend>Additional options</legend>
+                    <input type="checkbox" id="check-option-build-name" name="check-option-build-name">
+                    <label for="check-option-build-name">Show the name of the build</label><br/>
+                </fieldset>
+            </div>
+
         </div>
     </body>
 </html>

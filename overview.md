@@ -1,6 +1,10 @@
 #Visual Studio Team Services Code Coverage Widgets#
 
 ## Release Notes
+* 1.0.149
+    * Fixed defect where build was not showing as selected.
+    * Added configuration option to display build name on widget. 
+    * Updated to match native style.
 * 1.0.122
     * Widget can now be resized to one or two columns in width.
 * 1.0.119
@@ -19,6 +23,8 @@ The following configuration options are available:
 
 * **Title** - Title of the widget as it is displayed on the dashboard.
 * **Build Definition** - Choose the build definition you want code coverage displayed for on the widget.
+* **Additional options**
+    * **Show the name of the build** - Select if you want the name of the build to be displayed on the widget.
 
 ## Known Issues
-* When returning to the configuration screen of an existing widget the previously chosen build definition does not show as selected.
+* None.

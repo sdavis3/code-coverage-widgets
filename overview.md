@@ -1,6 +1,8 @@
 #Visual Studio Team Services Code Coverage Widgets#
 
 ## Release Notes
+* 1.0.162
+    * Displayed build name now links to build details.
 * 1.0.149
     * Fixed defect where build was not showing as selected.
     * Added configuration option to display build name on widget. 

@@ -22,6 +22,7 @@
                             $("#init-label").show();
                             $("div.big-count").hide();
                             $("#percent-label").hide();
+
                             return WidgetHelpers.WidgetStatusHelper.Success()
                         }
 
@@ -42,7 +43,7 @@
                                 // Populate dropdown with list of recent builds     
                                 $.each(query2, function(key, value) {
                                     var buildId = value.id; 
-
+                                    var buildWeb = value._links.web.href
                                     // Get code coverage summary for most recent build
                                     TFS_TestMgmt_WebApi.getClient().getCodeCoverageSummary(projectId, buildId)
                                         .then(function (query3) {
@@ -71,13 +72,14 @@
 
                                                 // Fetch build name
                                                 var buildName = query3.build.name;
-                                                
+
                                                 // Update UI with code coverage percentage
                                                 $("div.big-count").text(coveragePct);
                                                 $("div.big-count").show();
                                                 $("#percent-label").show();
                                                 $("#init-label").hide();
                                                 $("#build-name").text(buildName);
+                                                $("#build-link").prop("href", buildWeb);
                                             }
                                             else {
                                                 // Set display values for no coverage data
@@ -86,6 +88,7 @@
                                                 $("#init-label").text("No code coverage details found for this build definition");
                                                 $("#init-label").show();
                                                 $("#build-name").text("");
+                                                $("#build-link").removeProp("href");
                                             }
                                         });
                                 });
@@ -130,7 +133,9 @@
             <label id="init-label" hidden>No build definition selected</label>
             <div class="big-count" hidden></div>
             <label id="percent-label" hidden>Percent</label>
-            <div id="build-name" class="subtitle"></label>
+            <a id="build-link" target="_blank">
+                <div id="build-name" class="subtitle"></div>
+            </a>
         </div>
     </body>
 </html>

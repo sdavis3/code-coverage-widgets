@@ -29,12 +29,10 @@
                         if (settings && settings.checkOptionBuildName == true) {
                             // Show build name
                             $("#build-name").show();
-                            //console.log('Show. settings.checkOptionBuildName = ' + settings.checkOptionBuildName);
                         }
                         else {
                             // Hide build name
                             $("#build-name").hide();
-                            //console.log('Hide. settings.checkOptionBuildName = ' + settings.checkOptionBuildName);
                         }
 
                         // Get most recent successful build details
@@ -49,25 +47,31 @@
                                         .then(function (query3) {
                                             // Evaluate for where there is no coverage data                                        
                                             if (query3.coverageData[0]) {
-                                                // Filter for line coverage data
+                                                // Filter for line coverage measurement (default)
                                                 var coverageData = query3.coverageData[0].coverageStats.filter(function (el) {
                                                     return el.label == "Lines" ||
                                                            el.label == "Line";
                                                 });
                                                 
+                                                // Check if blocks coverage measurement is preferred
+                                                if (settings && settings.coverageMeasurement == "Blocks")
+                                                var coverageData = query3.coverageData[0].coverageStats.filter(function (el) {
+                                                    return el.label == "Blocks";
+                                                });
+                                                
                                                 // Iterate and count code coverage items
-                                                var totalLines = 0;
-                                                var linesCovered = 0;
+                                                var totalMesurement = 0;
+                                                var coveredMeasurement = 0;
                                                 var coveragePct = 0;
                                                 $.each(coverageData, function(key, value) {
-                                                    totalLines += value.total;
-                                                    linesCovered += value.covered;
+                                                    totalMesurement += value.total;
+                                                    coveredMeasurement += value.covered;
                                                 });
 
                                                 // Calculate code coverage percentage
                                                 // This check avoids divide by zero error
-                                                if (totalLines > 0) {
-                                                    coveragePct = Math.round((linesCovered / totalLines) * 100);
+                                                if (totalMesurement > 0) {
+                                                    coveragePct = Math.round((coveredMeasurement / totalMesurement) * 100);
                                                 }
 
                                                 // Fetch build name

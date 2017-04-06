@@ -17,6 +17,7 @@
 
                     var projectId = VSS.getWebContext().project.id;
                     var $buildDefinitionDropdown = $("#build-definition-dropdown");
+                    var $coverageMeasurementDropdown = $("#coverage-measurement-dropdown");
                     var $checkOptionBuildName = $("#check-option-build-name");
 
                     return {
@@ -31,27 +32,30 @@
                                 $.each(query, function(key, value) {
                                     $buildDefinitionDropdown.append($("<option />").val(value.id).text(value.name));
                                 });
-                                //onsole.log('populated dropdown with list of build definitions.');
 
                                 // Sort dropdown list of build definitions alphabetically                     
                                 $('#build-definition-dropdown').html($('#build-definition-dropdown' + ' option').sort(function(a, b) {
                                     return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
                                 }));
-                                //console.log('sorted dropdown list of build definitions alphabetically.');
                                 
                                 // If a build definition has been previously selected, set the dropdown value
                                 if (settings && settings.buildDefinition) {
-                                    //console.log('load settings.buildDefinition = ' + settings.buildDefinition);
-                                    // TODO: the line below does not seem to work. It should set the value.
                                     $buildDefinitionDropdown.val(settings.buildDefinition).trigger("chosen:updated");
-                                    //console.log('set the dropdown value because a build definition was previously selected.');
                                 }
                                 else {
                                     // Set the Please select... item as the default
                                     $('#build-definition-dropdown').prepend($('<option />').val('').text('Please select a build definition:'));
                                     $('#build-definition-dropdown').val('');
                                     $("#build-definition-dropdown option[value='']").attr("disabled", true);
-                                    //console.log('set the pease select... item as the default.');
+                                }
+
+                                // If a coverage measurement has been previously selected, set the dropdown value
+                                if (settings && settings.coverageMeasurement) {
+                                    $coverageMeasurementDropdown.val(settings.coverageMeasurement).trigger("chosen:updated");
+                                }
+                                else {
+                                    // Set Lines... item as the default
+                                    $('#coverage-measurement-dropdown').val('Lines');
                                 }
 
                                 // Use the widget helper and return success as Widget Status
@@ -60,7 +64,7 @@
                                 // Use the widget helper and return failure as Widget Status
                                 return WidgetHelpers.WidgetStatusHelper.Failure(error.message);
                             });
-
+                            
                             // If show build name has been previously selected, set the checkbox value
                             if (settings && settings.checkOptionBuildName == true) {
                                 //console.log('load settings.checkOptionBuildName = ' + settings.checkOptionBuildName);
@@ -76,6 +80,7 @@
                                 var customSettings = {
                                     data: JSON.stringify({
                                         buildDefinition: $buildDefinitionDropdown.val(),
+                                        coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         checkOptionBuildName: $checkOptionBuildName.prop('checked') 
                                     })
                                 };
@@ -83,11 +88,27 @@
                                 var eventArgs = WidgetHelpers.WidgetEvent.Args(customSettings);
                                 widgetConfigurationContext.notify(eventName, eventArgs);
                             });
+
+                            // If a coverage measurement change has been made, prepare to persist the new values
+                            $coverageMeasurementDropdown.on("change", function () {
+                                var customSettings = {
+                                    data: JSON.stringify({
+                                        buildDefinition: $buildDefinitionDropdown.val(),
+                                        coverageMeasurement: $coverageMeasurementDropdown.val(),
+                                        checkOptionBuildName: $checkOptionBuildName.prop('checked') 
+                                    })
+                                };
+                                var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
+                                var eventArgs = WidgetHelpers.WidgetEvent.Args(customSettings);
+                                widgetConfigurationContext.notify(eventName, eventArgs);
+                            });
+
                             // If a show build name change has been made, prepare to persist the new values
                             $checkOptionBuildName.on("change", function () {
                                 var customSettings = {
                                     data: JSON.stringify({
                                         buildDefinition: $buildDefinitionDropdown.val(),
+                                        coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         checkOptionBuildName: $checkOptionBuildName.prop('checked')
                                     })
                                 };
@@ -100,11 +121,10 @@
                         },
                         onSave: function() {
                             // Persist the selected definition
-                            //console.log('onSave buildDefinition = ' + $buildDefinitionDropdown.val());
-                            //console.log('onSave checkOptionBuildName = ' + $checkOptionBuildName.prop('checked'));
                             var customSettings = {
                                 data: JSON.stringify({
                                     buildDefinition: $buildDefinitionDropdown.val(),
+                                    coverageMeasurement: $coverageMeasurementDropdown.val(),
                                     checkOptionBuildName: $checkOptionBuildName.prop('checked')
                                 })
                             };
@@ -126,14 +146,23 @@
                         <!--<option value="Shared Queries/Feedback">Shared Queries/Feedback</option>-->                                                 
                     </select>
                 </div>
-                
+            </div>
+            <div class="dropdown">
+                <label>Coverage Measurement</label>
+                <div class="wrapper">
+                    <select id="coverage-measurement-dropdown">                        
+                        <option value="Blocks">Blocks</option>
+                        <option value="Lines">Lines</option>
+                    </select>
+                </div>
+            </div>
+            <div class="checkbox">  
                 <fieldset class="checkbox">
                     <legend>Additional options</legend>
                     <input type="checkbox" id="check-option-build-name" name="check-option-build-name">
                     <label for="check-option-build-name">Show the name of the build</label><br/>
                 </fieldset>
             </div>
-
         </div>
     </body>
 </html>

@@ -1,6 +1,8 @@
 #Visual Studio Team Services Code Coverage Widgets#
 
 ## Release Notes
+* 1.0.166
+    * Added configuration option to measure Lines or Blocks.
 * 1.0.162
     * Displayed build name now links to build details.
 * 1.0.149

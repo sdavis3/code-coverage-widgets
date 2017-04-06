@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "code-coverage-dashboard-widgets",
-    "version": "1.0.162",
+    "version": "1.0.166",
     "name": "Code Coverage Widgets",
     "description": "A collection of dashboard widgets for displaying code coverage in VSTS.",
     "publisher": "shanebdavis",
@@ -46,7 +46,7 @@
         }
     },
     "branding": {
-        "color": "006552",
+        "color": "87C2E1",
         "theme": "light"
     },
     "categories": [

@@ -1,6 +1,17 @@
 #Visual Studio Team Services Code Coverage Widgets#
 
 ## Release Notes
+* 1.0.171
+    * Added configuration option to display up to two decimal places. Zero is the default.
+    * Added broader configuration options for broader coverage measurement:
+        * Blocks
+        * Branch
+        * Class
+        * Complexity
+        * Instruction
+        * Line
+        * Lines (this is the default)
+        * Method
 * 1.0.166
     * Added configuration option to measure Lines or Blocks.
 * 1.0.162
@@ -26,7 +37,10 @@ The following configuration options are available:
 ![](img/screenshots/configuration.png)
 
 * **Title** - Title of the widget as it is displayed on the dashboard.
-* **Build Definition** - Choose the build definition you want code coverage displayed for on the widget.
+* **Size** - Allows the widget to be resized to 1x1 or 2x1 (2 columns wide).
+* **Build definition** - Choose the build definition you want code coverage displayed for on the widget.
+* **Coverage measurement** - Choose a coverage measurement type. Lines is the default.
+* **Decimal places to show** - Choose the number of decimal places to show. Zero is the default.
 * **Additional options**
     * **Show the name of the build** - Select if you want the name of the build to be displayed on the widget.
 

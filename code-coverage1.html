@@ -47,31 +47,40 @@
                                         .then(function (query3) {
                                             // Evaluate for where there is no coverage data                                        
                                             if (query3.coverageData[0]) {
-                                                // Filter for line coverage measurement (default)
+                                                // Filter for selected coverage measurement
+                                                var coverageMeasurement = "";
+                                                if (!settings || !settings.coverageMeasurement) {
+                                                    // Default to Lines if not previously chosen
+                                                    coverageMeasurement = "Lines";
+                                                }
+                                                else {
+                                                    coverageMeasurement = settings.coverageMeasurement;
+                                                }
                                                 var coverageData = query3.coverageData[0].coverageStats.filter(function (el) {
-                                                    return el.label == "Lines" ||
-                                                           el.label == "Line";
-                                                });
-                                                
-                                                // Check if blocks coverage measurement is preferred
-                                                if (settings && settings.coverageMeasurement == "Blocks")
-                                                var coverageData = query3.coverageData[0].coverageStats.filter(function (el) {
-                                                    return el.label == "Blocks";
+                                                    return el.label == coverageMeasurement;
                                                 });
                                                 
                                                 // Iterate and count code coverage items
-                                                var totalMesurement = 0;
+                                                var totalMeasurement = 0;
                                                 var coveredMeasurement = 0;
                                                 var coveragePct = 0;
                                                 $.each(coverageData, function(key, value) {
-                                                    totalMesurement += value.total;
+                                                    totalMeasurement += value.total;
                                                     coveredMeasurement += value.covered;
                                                 });
-
+                                                                                           
                                                 // Calculate code coverage percentage
                                                 // This check avoids divide by zero error
-                                                if (totalMesurement > 0) {
-                                                    coveragePct = Math.round((coveredMeasurement / totalMesurement) * 100);
+                                                if (totalMeasurement > 0) {
+                                                    coveragePct = ((coveredMeasurement / totalMeasurement) * 100);
+                                                    // Determine and set the requested number of decimal places
+                                                    if (!settings || !settings.decimalPlaces) {
+                                                        // Default to zero if not previously chosen
+                                                        coveragePct = coveragePct.toFixed(0);
+                                                    }
+                                                    else {
+                                                        coveragePct = coveragePct.toFixed(parseInt(settings.decimalPlaces));
+                                                    }
                                                 }
 
                                                 // Fetch build name

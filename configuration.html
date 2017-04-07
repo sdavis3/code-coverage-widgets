@@ -18,6 +18,7 @@
                     var projectId = VSS.getWebContext().project.id;
                     var $buildDefinitionDropdown = $("#build-definition-dropdown");
                     var $coverageMeasurementDropdown = $("#coverage-measurement-dropdown");
+                    var $decimalPlacesDropdown = $("#decimal-places-dropdown");
                     var $checkOptionBuildName = $("#check-option-build-name");
 
                     return {
@@ -54,8 +55,17 @@
                                     $coverageMeasurementDropdown.val(settings.coverageMeasurement).trigger("chosen:updated");
                                 }
                                 else {
-                                    // Set Lines... item as the default
+                                    // Set Lines... item as the default regardless of project type
                                     $('#coverage-measurement-dropdown').val('Lines');
+                                }
+
+                                // If number of decimal places has been previously selected, set the dropdown value
+                                if (settings && settings.decimalPlaces) {
+                                    $decimalPlacesDropdown.val(settings.decimalPlaces).tigger("chosen:updated");
+                                }
+                                else {
+                                    // Set zero... item as the default
+                                    $('#decimal-places-dropdown').val('0');
                                 }
 
                                 // Use the widget helper and return success as Widget Status
@@ -81,6 +91,7 @@
                                     data: JSON.stringify({
                                         buildDefinition: $buildDefinitionDropdown.val(),
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
+                                        decimalPlaces: $decimalPlacesDropdown.val(),
                                         checkOptionBuildName: $checkOptionBuildName.prop('checked') 
                                     })
                                 };
@@ -95,6 +106,22 @@
                                     data: JSON.stringify({
                                         buildDefinition: $buildDefinitionDropdown.val(),
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
+                                        decimalPlaces: $decimalPlacesDropdown.val(),
+                                        checkOptionBuildName: $checkOptionBuildName.prop('checked') 
+                                    })
+                                };
+                                var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
+                                var eventArgs = WidgetHelpers.WidgetEvent.Args(customSettings);
+                                widgetConfigurationContext.notify(eventName, eventArgs);
+                            });
+
+                            // If a decimal places shown change has been made, prepare to persist the new values
+                            $decimalPlacesDropdown.on("change", function () {
+                                var customSettings = {
+                                    data: JSON.stringify({
+                                        buildDefinition: $buildDefinitionDropdown.val(),
+                                        coverageMeasurement: $coverageMeasurementDropdown.val(),
+                                        decimalPlaces: $decimalPlacesDropdown.val(),
                                         checkOptionBuildName: $checkOptionBuildName.prop('checked') 
                                     })
                                 };
@@ -109,6 +136,7 @@
                                     data: JSON.stringify({
                                         buildDefinition: $buildDefinitionDropdown.val(),
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
+                                        decimalPlaces: $decimalPlacesDropdown.val(),
                                         checkOptionBuildName: $checkOptionBuildName.prop('checked')
                                     })
                                 };
@@ -125,6 +153,7 @@
                                 data: JSON.stringify({
                                     buildDefinition: $buildDefinitionDropdown.val(),
                                     coverageMeasurement: $coverageMeasurementDropdown.val(),
+                                    decimalPlaces: $decimalPlacesDropdown.val(),
                                     checkOptionBuildName: $checkOptionBuildName.prop('checked')
                                 })
                             };
@@ -140,7 +169,7 @@
         <div class="widget-configuration">
 
             <div class="dropdown">
-                <label>Build Definition</label>
+                <label>Build definition</label>
                 <div class="wrapper">
                     <select id="build-definition-dropdown">                        
                         <!--<option value="Shared Queries/Feedback">Shared Queries/Feedback</option>-->                                                 
@@ -148,11 +177,27 @@
                 </div>
             </div>
             <div class="dropdown">
-                <label>Coverage Measurement</label>
+                <label>Coverage measurement</label>
                 <div class="wrapper">
-                    <select id="coverage-measurement-dropdown">                        
+                    <select id="coverage-measurement-dropdown">                                              
                         <option value="Blocks">Blocks</option>
+                        <option value="Branch">Branch</option>
+                        <option value="Class">Class</option>
+                        <option value="Complexity">Complexity</option>
+                        <option value="Instruction">Instruction</option>
+                        <option value="Line">Line</option>
                         <option value="Lines">Lines</option>
+                        <option value="Method">Method</option>
+                    </select>
+                </div>
+            </div>
+            <div class="dropdown">
+                <label>Decimal place to show</label>
+                <div class="wrapper">
+                    <select id="decimal-places-dropdown">                                              
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2 (may require resizing widget)</option>
                     </select>
                 </div>
             </div>

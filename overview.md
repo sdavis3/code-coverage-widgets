@@ -1,4 +1,5 @@
 #Visual Studio Team Services Code Coverage Widgets#
+## NOTE: This also works with Team Foundation Services (on-premise).
 
 ## Release Notes
 * 1.0.190

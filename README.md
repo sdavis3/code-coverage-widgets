@@ -1,6 +1,5 @@
 # Code Coverage Dashboard Widgets
-This repository contains a collection of [Visual Studio Team Services (VSTS)/ Team Foundation Services (TFS)](https://www.visualstudio.com/en-us/products/visual-studio-team-services-vs.aspx) 
-dashboard widgets that can be used to extract unit test code coverage metrics right into your VSTS/TFS dashboard.
+This repository contains a collection of [Visual Studio Team Services (VSTS)](https://www.visualstudio.com/en-us/products/visual-studio-team-services-vs.aspx)/Team Foundation Services (TFS) dashboard widgets that can be used to extract unit test code coverage metrics right into your VSTS/TFS dashboard.
 
 ![](img/preview1.png)
 

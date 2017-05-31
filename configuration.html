@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <script src="sdk/scripts/VSS.SDK.min.js"></script>
+        <script src="lib/VSS.SDK.min.js"></script>
         <script type="text/javascript">
+            // Initialize
             VSS.init({
                 explicitNotifyLoaded: true,
                 usePlatformStyles: true,
@@ -26,8 +27,7 @@
                             // Retrieve configurations settings
                             var settings = JSON.parse(widgetSettings.customSettings.data);
                         
-                            TFS_Build_WebApi.getClient().getDefinitions(projectId)
-                        .then(function (query) {
+                            TFS_Build_WebApi.getClient().getDefinitions(projectId).then(function (query) {
                                 
                                 // Populate dropdown with list of build definitions     
                                 $.each(query, function(key, value) {
@@ -77,7 +77,6 @@
                             
                             // If show build name has been previously selected, set the checkbox value
                             if (settings && settings.checkOptionBuildName == true) {
-                                //console.log('load settings.checkOptionBuildName = ' + settings.checkOptionBuildName);
                                 $checkOptionBuildName.prop('checked', true);
                             } 
                             // Otherwise, mark the box as unchecked
@@ -87,12 +86,15 @@
                             
                             // If a build definition change has been made, prepare to persist the new values
                             $buildDefinitionDropdown.on("change", function () {
+                                // Output diagnostics info to console
+                                console.log('event: buildDefinitionDropdown.change');
+
                                 var customSettings = {
                                     data: JSON.stringify({
                                         buildDefinition: $buildDefinitionDropdown.val(),
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         decimalPlaces: $decimalPlacesDropdown.val(),
-                                        checkOptionBuildName: $checkOptionBuildName.prop('checked') 
+                                        checkOptionBuildName: $checkOptionBuildName.prop('checked')
                                     })
                                 };
                                 var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
@@ -102,6 +104,9 @@
 
                             // If a coverage measurement change has been made, prepare to persist the new values
                             $coverageMeasurementDropdown.on("change", function () {
+                                // Output diagnostics info to console
+                                console.log('event: coverageMeasurementDropdown.change');
+
                                 var customSettings = {
                                     data: JSON.stringify({
                                         buildDefinition: $buildDefinitionDropdown.val(),
@@ -117,12 +122,15 @@
 
                             // If a decimal places shown change has been made, prepare to persist the new values
                             $decimalPlacesDropdown.on("change", function () {
+                                // Output diagnostics info to console
+                                console.log('event: decimalPlacesDropdown.change');
+
                                 var customSettings = {
                                     data: JSON.stringify({
                                         buildDefinition: $buildDefinitionDropdown.val(),
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         decimalPlaces: $decimalPlacesDropdown.val(),
-                                        checkOptionBuildName: $checkOptionBuildName.prop('checked') 
+                                        checkOptionBuildName: $checkOptionBuildName.prop('checked')
                                     })
                                 };
                                 var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
@@ -132,6 +140,9 @@
 
                             // If a show build name change has been made, prepare to persist the new values
                             $checkOptionBuildName.on("change", function () {
+                                // Output diagnostics info to console
+                                console.log('event: checkOptionBuildName.change');
+
                                 var customSettings = {
                                     data: JSON.stringify({
                                         buildDefinition: $buildDefinitionDropdown.val(),
@@ -148,6 +159,9 @@
                             return WidgetHelpers.WidgetStatusHelper.Success();
                         },
                         onSave: function() {
+                            // Output diagnostics info to console
+                            console.log('event: onSave');
+
                             // Persist the selected definition
                             var customSettings = {
                                 data: JSON.stringify({
@@ -172,7 +186,7 @@
                 <label>Build definition</label>
                 <div class="wrapper">
                     <select id="build-definition-dropdown">                        
-                        <!--<option value="Shared Queries/Feedback">Shared Queries/Feedback</option>-->                                                 
+                        <!--<option value="Shared Queries/Feedback">Shared Queries/Feedback</option>-->
                     </select>
                 </div>
             </div>
@@ -197,7 +211,7 @@
                     <select id="decimal-places-dropdown">                                              
                         <option value="0">0</option>
                         <option value="1">1</option>
-                        <option value="2">2 (may require resizing widget)</option>
+                        <option value="2">2</option>
                     </select>
                 </div>
             </div>

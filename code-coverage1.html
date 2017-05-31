@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="sdk/scripts/VSS.SDK.min.js"></script>
+        <script src="lib/VSS.SDK.min.js"></script>
         <script type="text/javascript">
+            // Initialize
             VSS.init({
                 explicitNotifyLoaded: true,
                 usePlatformStyles: true,
@@ -12,7 +13,7 @@
             VSS.require(["TFS/Dashboards/WidgetHelpers", "TFS/Build/RestClient", "TFS/TestManagement/RestClient"], 
             function (WidgetHelpers, TFS_Build_WebApi, TFS_TestMgmt_WebApi) {
                 WidgetHelpers.IncludeWidgetStyles();
-                // TODO: The following line may need VSS.ready() instead. Need to test.
+
                 VSS.register("CodeCoverageWidget1", function () {
                     var projectId = VSS.getWebContext().project.id;
                     var getBuildBuildInfo = function (widgetSettings) {
@@ -22,7 +23,7 @@
                             $("#init-label").show();
                             $("div.big-count").hide();
                             $("#percent-label").hide();
-
+                            
                             return WidgetHelpers.WidgetStatusHelper.Success()
                         }
 
@@ -34,14 +35,23 @@
                             // Hide build name
                             $("#build-name").hide();
                         }
+                        
+                        // Output diagnostics info to console
+                        console.log('projectId = ' + projectId);
+                        console.log('settings.buildDefinition = ' + settings.buildDefinition);
 
                         // Get most recent successful build details
-                        TFS_Build_WebApi.getClient().getBuilds(projectId, [parseInt(settings.buildDefinition)], null, null, null, null, null, null, "Completed", "Succeeded", null, null, null, 1)
+                        // .getBuilds(project, definitions, queues, buildNumber, minFinishTime, maxFinishTime, requestedFor, reasonFilter, statusFilter, resultFilter, tagFilters, properties, type, top, continuationToken, maxBuildsPerDefinition, deletedFilter, queryOrder, branchName)
+                        TFS_Build_WebApi.getClient().getBuilds(projectId, [parseInt(settings.buildDefinition)], null, null, null, null, null, null, "Completed", "PartiallySucceeded,Succeeded", null, null, null, 1, null, null, null, null, null)
                             .then(function (query2) {
-                                // Populate dropdown with list of recent builds     
-                                $.each(query2, function(key, value) {
-                                    var buildId = value.id; 
-                                    var buildWeb = value._links.web.href
+                                // Evaluate build details of first result  
+                                if (query2[0]) {
+                                    var buildId = query2[0].id; 
+                                    var buildWeb = query2[0]._links.web.href
+
+                                    // Output diagnostics info to console
+                                    console.log('buildId = ' + buildId);
+
                                     // Get code coverage summary for most recent build
                                     TFS_TestMgmt_WebApi.getClient().getCodeCoverageSummary(projectId, buildId)
                                         .then(function (query3) {
@@ -87,12 +97,15 @@
                                                 var buildName = query3.build.name;
 
                                                 // Update UI with code coverage percentage
+                                                $("div.big-count").hide();
+                                                $("#percent-label").hide();
+
                                                 $("div.big-count").text(coveragePct);
                                                 $("div.big-count").show();
                                                 $("#percent-label").show();
                                                 $("#init-label").hide();
                                                 $("#build-name").text(buildName);
-                                                $("#build-link").prop("href", buildWeb);
+                                                $("#build-link").prop("href", buildWeb);                                               
                                             }
                                             else {
                                                 // Set display values for no coverage data
@@ -104,7 +117,16 @@
                                                 $("#build-link").removeProp("href");
                                             }
                                         });
-                                });
+                                }
+                                else {
+                                    // Set display values for build details
+                                    $("div.big-count").hide();
+                                    $("#percent-label").hide();
+                                    $("#init-label").text("No code coverage details found for this build definition");
+                                    $("#init-label").show();
+                                    $("#build-name").text("");
+                                    $("#build-link").removeProp("href");
+                                };
                             });
                         
                         // Get a client to make REST calls to VSTS
@@ -126,11 +148,17 @@
                             // Set title
                             $("h2.title").text(widgetSettings.name);
 
+                            // Output diagnostics info to console
+                            console.log('event: load');
+
                             return getBuildBuildInfo(widgetSettings);
                         },
                         reload: function (widgetSettings) {
                             // Set title
                             $("h2.title").text(widgetSettings.name);
+                            
+                            // Output diagnostics info to console
+                            console.log('event: reload');
 
                             return getBuildBuildInfo(widgetSettings);
                         }

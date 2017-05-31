@@ -1,0 +1,24 @@
+{
+    "authors": "Asana <https://asana.com>, AssureSign <http://www.assuresign.com>, Microsoft <https://microsoft.com>, John Reilly <https://github.com/johnnyreilly/>",
+    "libraryDependencies": [],
+    "moduleDependencies": [],
+    "libraryMajorVersion": 0,
+    "libraryMinorVersion": 14,
+    "typeScriptVersion": "2.0",
+    "libraryName": "React",
+    "typingsPackageName": "react",
+    "projectName": "http://facebook.github.io/react/",
+    "sourceRepoURL": "https://www.github.com/DefinitelyTyped/DefinitelyTyped",
+    "sourceBranch": "master",
+    "globals": [
+        "React"
+    ],
+    "declaredModules": [
+        "react"
+    ],
+    "files": [
+        "index.d.ts"
+    ],
+    "hasPackageJson": false,
+    "contentHash": "e35ac566aad08448fb2a54493940cc2a1c04f01a994f8e0666a285f612c2a479"
+}

@@ -1,6 +1,11 @@
 #Visual Studio Team Services Code Coverage Widgets#
 
 ## Release Notes
+* 1.0.190
+    * Added support for Partially Succeeded builds.
+* 1.0.189
+    * Updated to latest SDK.
+    * Minor updates to improve error handling.
 * 1.0.171
     * Added configuration option to display up to two decimal places. Zero is the default.
     * Added broader configuration options for broader coverage measurement:

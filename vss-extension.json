@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "code-coverage-dashboard-widgets",
-    "version": "1.0.171",
+    "version": "1.0.190",
     "name": "Code Coverage Widgets",
     "description": "A collection of dashboard widgets for displaying code coverage in VSTS.",
     "publisher": "shanebdavis",
@@ -99,10 +99,12 @@
             "path": "configuration.html", "addressable": true
         },
         {
-            "path": "sdk/scripts", "addressable": true
+            "path": "img", "addressable": true
         },
         {
-            "path": "img", "addressable": true
+            "path": "node_modules/vss-web-extension-sdk/lib",
+            "addressable": true,
+            "packagePath": "lib"
         }
     ],
     "galleryFlags": [

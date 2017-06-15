@@ -42,7 +42,7 @@
 
                         // Get most recent successful build details
                         // .getBuilds(project, definitions, queues, buildNumber, minFinishTime, maxFinishTime, requestedFor, reasonFilter, statusFilter, resultFilter, tagFilters, properties, type, top, continuationToken, maxBuildsPerDefinition, deletedFilter, queryOrder, branchName)
-                        TFS_Build_WebApi.getClient().getBuilds(projectId, [parseInt(settings.buildDefinition)], null, null, null, null, null, null, "Completed", "PartiallySucceeded,Succeeded", null, null, null, 1, null, null, null, null, null)
+                        TFS_Build_WebApi.getClient().getBuilds(projectId, [parseInt(settings.buildDefinition)], null, null, null, null, null, null, "Completed", "Failed,PartiallySucceeded,Succeeded", null, null, null, 1, null, null, null, null, null)
                             .then(function (query2) {
                                 // Evaluate build details of first result  
                                 if (query2[0]) {

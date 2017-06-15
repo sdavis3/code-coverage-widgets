@@ -1,7 +1,9 @@
-#Visual Studio Team Services Code Coverage Widgets#
-## NOTE: This also works with Team Foundation Services (on-premise).
+#Code Coverage Dashboard Widgets#
+## NOTE: This works with Visual Studio Team Services and Team Foundation Server. However, Microsoft requires TFS 2015 Update 3 or higher for folks using Team Foundation Server.
 
 ## Release Notes
+* 1.0.191
+    * Added support for Failed builds that produce code coverage results.
 * 1.0.190
     * Added support for Partially Succeeded builds.
 * 1.0.189

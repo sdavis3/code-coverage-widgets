@@ -2,8 +2,8 @@
 * NOTE: This works with Visual Studio Team Services and Team Foundation Server. However, Microsoft requires TFS 2015 Update 3 or higher for folks using Team Foundation Server.
 
 ## Release Notes
-* 1.0.192
-    * Added support for Braches (via PR from [Tommy Vernieri](https://github.com/Blackbaud-TommyVernieri]))
+* 1.0.193
+    * Added support for Braches (via PR from [Tommy Vernieri](https://github.com/Blackbaud-TommyVernieri))
 * 1.0.191
     * Added support for Failed builds that produce code coverage results.
 * 1.0.190

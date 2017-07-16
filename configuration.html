@@ -21,6 +21,7 @@
                     var $coverageMeasurementDropdown = $("#coverage-measurement-dropdown");
                     var $decimalPlacesDropdown = $("#decimal-places-dropdown");
                     var $checkOptionBuildName = $("#check-option-build-name");
+                    var $checkOptionMeasurementName = $("#check-option-measurement-name");
 
                     return {
                         load: function (widgetSettings, widgetConfigurationContext) {
@@ -84,6 +85,15 @@
                                 $checkOptionBuildName.prop('checked', false);
                             }
                             
+                            // If show measurement name has been previously selected, set the checkbox value
+                            if (settings && settings.checkOptionMeasurementName == true) {
+                                $checkOptionMeasurementName.prop('checked', true);
+                            }
+                            // Otherwise, mark the box as unchecked
+                            else {
+                                $checkOptionMeasurementName.prop('checked', false);
+                            }
+
                             // If a build definition change has been made, prepare to persist the new values
                             $buildDefinitionDropdown.on("change", function () {
                                 // Output diagnostics info to console
@@ -94,7 +104,8 @@
                                         buildDefinition: $buildDefinitionDropdown.val(),
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         decimalPlaces: $decimalPlacesDropdown.val(),
-                                        checkOptionBuildName: $checkOptionBuildName.prop('checked')
+                                        checkOptionBuildName: $checkOptionBuildName.prop('checked'),
+                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked')
                                     })
                                 };
                                 var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
@@ -112,7 +123,8 @@
                                         buildDefinition: $buildDefinitionDropdown.val(),
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         decimalPlaces: $decimalPlacesDropdown.val(),
-                                        checkOptionBuildName: $checkOptionBuildName.prop('checked') 
+                                        checkOptionBuildName: $checkOptionBuildName.prop('checked'),
+                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked')
                                     })
                                 };
                                 var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
@@ -130,7 +142,8 @@
                                         buildDefinition: $buildDefinitionDropdown.val(),
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         decimalPlaces: $decimalPlacesDropdown.val(),
-                                        checkOptionBuildName: $checkOptionBuildName.prop('checked')
+                                        checkOptionBuildName: $checkOptionBuildName.prop('checked'),
+                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked')
                                     })
                                 };
                                 var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
@@ -148,7 +161,29 @@
                                         buildDefinition: $buildDefinitionDropdown.val(),
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         decimalPlaces: $decimalPlacesDropdown.val(),
-                                        checkOptionBuildName: $checkOptionBuildName.prop('checked')
+                                        checkOptionBuildName: $checkOptionBuildName.prop('checked'),
+                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked')
+
+                                    })
+                                };
+                                var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
+                                var eventArgs = WidgetHelpers.WidgetEvent.Args(customSettings);
+                                widgetConfigurationContext.notify(eventName, eventArgs);
+                            });
+
+                            // If a show measurement name change has been made, prepare to persist the new values
+                            $checkOptionMeasurementName.on("change", function () {
+                                // Output diagnostics info to console
+                                console.log('event: checkOptionMeasurementName.change');
+
+                                var customSettings = {
+                                    data: JSON.stringify({
+                                        buildDefinition: $buildDefinitionDropdown.val(),
+                                        coverageMeasurement: $coverageMeasurementDropdown.val(),
+                                        decimalPlaces: $decimalPlacesDropdown.val(),
+                                        checkOptionBuildName: $checkOptionBuildName.prop('checked'),
+                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked')
+
                                     })
                                 };
                                 var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
@@ -168,7 +203,9 @@
                                     buildDefinition: $buildDefinitionDropdown.val(),
                                     coverageMeasurement: $coverageMeasurementDropdown.val(),
                                     decimalPlaces: $decimalPlacesDropdown.val(),
-                                    checkOptionBuildName: $checkOptionBuildName.prop('checked')
+                                    checkOptionBuildName: $checkOptionBuildName.prop('checked'),
+                                    checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked')
+
                                 })
                             };
                             return WidgetHelpers.WidgetConfigurationSave.Valid(customSettings);
@@ -221,6 +258,8 @@
                     <legend>Additional options</legend>
                     <input type="checkbox" id="check-option-build-name" name="check-option-build-name">
                     <label for="check-option-build-name">Show the name of the build</label><br/>
+                    <input type="checkbox" id="check-option-measurement-name" name="check-option-measurement-name">
+                    <label for="check-option-measurement-name">Show the name of the coverage measurement</label><br />
                 </fieldset>
             </div>
         </div>

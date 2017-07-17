@@ -100,6 +100,15 @@
                                                 $("div.big-count").hide();
                                                 $("#percent-label").hide();
 
+                                                if (settings && settings.checkOptionMeasurementName == true) {
+                                                    // Add the measurement name to the percent label
+                                                    $("#percent-label").text("Percent (" + coverageMeasurement + ")");
+                                                }
+                                                else {
+                                                    // Use the default percent label
+                                                    $("#percent-label").text("Percent");
+                                                }
+
                                                 $("div.big-count").text(coveragePct);
                                                 $("div.big-count").show();
                                                 $("#percent-label").show();

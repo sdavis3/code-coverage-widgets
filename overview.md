@@ -2,6 +2,8 @@
 * NOTE: This works with Visual Studio Team Services and Team Foundation Server. However, Microsoft requires TFS 2015 Update 3 or higher for folks using Team Foundation Server.
 
 ## Release Notes
+* 1.0.195
+    * Added configuration option to display measurement name (via PR from [Tommy Vernieri](https://github.com/Blackbaud-TommyVernieri))
 * 1.0.194
     * Added support for Branches (via PR from [Tommy Vernieri](https://github.com/Blackbaud-TommyVernieri))
 * 1.0.191

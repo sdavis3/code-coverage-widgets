@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "code-coverage-dashboard-widgets",
-    "version": "1.0.194",
+    "version": "1.0.195",
     "name": "Code Coverage Widgets",
     "description": "A collection of dashboard widgets for displaying code coverage details in Visual Studio Team Services (VSTS) and Team Foundation Server (TFS).",
     "publisher": "shanebdavis",

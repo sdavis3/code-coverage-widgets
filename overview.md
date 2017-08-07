@@ -48,13 +48,5 @@ The following configuration options are available:
 
 ![](img/screenshots/configuration.png)
 
-* **Title** - Title of the widget as it is displayed on the dashboard.
-* **Size** - Allows the widget to be resized to 1x1 or 2x1 (2 columns wide).
-* **Build definition** - Choose the build definition you want code coverage displayed for on the widget.
-* **Coverage measurement** - Choose a coverage measurement type. Lines is the default.
-* **Decimal places to show** - Choose the number of decimal places to show. Zero is the default.
-* **Additional options**
-    * **Show the name of the build** - Select if you want the name of the build to be displayed on the widget.
-
 ## Known Issues
 * None.

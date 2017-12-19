@@ -14,15 +14,13 @@
             function (WidgetHelpers, TFS_Build_WebApi, TFS_TestMgmt_WebApi) {
                 WidgetHelpers.IncludeWidgetStyles();
 
-                VSS.register("CodeCoverageWidget1", function () {
+                VSS.register("CodeCoverageWidget2", function () {
                     var projectId = VSS.getWebContext().project.id;
                     var getBuildBuildInfo = function (widgetSettings) {
                         var settings = JSON.parse(widgetSettings.customSettings.data);
                         if (!settings || !settings.buildDefinition) {                      
                             // Initialize display values
                             $("#init-label").show();
-                            $("div.big-count").hide();
-                            $("#percent-label").hide();
                             
                             return WidgetHelpers.WidgetStatusHelper.Success()
                         }
@@ -48,7 +46,6 @@
                                     // Evaluate build details of first result  
                                     if (query2[0]) {
                                         var buildId = query2[0].id; 
-                                        var buildName = query2[0].buildNumber;
                                         var buildWeb = query2[0]._links.web.href
 
                                         // Output diagnostics info to console
@@ -59,8 +56,6 @@
                                             .then(function (query3) {
                                                 // Evaluate for where there is no coverage data                                        
                                                 if (query3.coverageData[0]) {
-                                                    // Output diagnostics info to console
-                                                    console.log('coverageData found.');
                                                     // Filter for selected coverage measurement
                                                     var coverageMeasurement = "";
                                                     if (!settings || !settings.coverageMeasurement) {
@@ -97,9 +92,8 @@
                                                         }
                                                     }
 
-                                                    // Update UI with code coverage percentage
-                                                    $("div.big-count").hide();
-                                                    $("#percent-label").hide();
+                                                    // Fetch build name
+                                                    var buildName = query3.build.name;
 
                                                     if (settings && settings.checkOptionMeasurementName == true) {
                                                         // Add the measurement name to the percent label
@@ -110,20 +104,13 @@
                                                         $("#percent-label").text("Percent");
                                                     }
 
-                                                    $("div.big-count").text(coveragePct);
-                                                    $("div.big-count").show();
-                                                    $("#percent-label").show();
                                                     $("#init-label").hide();
                                                     $("#build-name").text(buildName);
                                                     $("#build-link").prop("href", buildWeb);  
                                                     $("#build-link").prop("target", "_top");                                             
                                                 }
                                                 else {
-                                                    // Output diagnostics info to console
-                                                    console.log('No coverageData found.');
                                                     // Set display values for no coverage data
-                                                    $("div.big-count").hide();
-                                                    $("#percent-label").hide();
                                                     $("#init-label").text("No code coverage details found for this build definition");
                                                     $("#init-label").show();
                                                     $("#build-name").text("");
@@ -133,8 +120,6 @@
                                     }
                                     else {
                                         // Set display values for build details
-                                        $("div.big-count").hide();
-                                        $("#percent-label").hide();
                                         $("#init-label").text("No code coverage details found for this build definition");
                                         $("#init-label").show();
                                         $("#build-name").text("");
@@ -183,8 +168,41 @@
         <div class="widget">
             <h2 class="title"></h2>
             <label id="init-label" hidden>No build definition selected</label>
-            <div class="big-count" hidden></div>
-            <label id="percent-label" hidden>Percent</label>
+            <!-- Load c3.css -->
+            <link href="c3.css" rel="stylesheet" type="text/css">
+            <!-- Load d3.js and c3.js -->
+            <script src="d3.v3.min.js" charset="utf-8"></script>
+            <script src="c3.min.js"></script>
+            <script>
+                var generate = function () { return c3.generate({
+                    data: {
+                        columns: [
+                            ['Code Coverage', 0, .05, .10, .25, .50, .75, .80, .85, .90, .95]
+                        ],
+                        type: 'bar'
+                    },
+                    bar: {
+                        space: 0.1
+                    },
+                    axis: {
+                        x: {
+                            show: false
+                        },
+                        y: {
+                            label: {
+                                text: 'Percentage',
+                                position: 'outer-middle'
+                            },
+                            tick: {
+                                format: d3.format("%")
+                            }
+                        }
+                    },
+                    legend: {
+                        show: false
+                    }
+                }); }, chart = generate();
+            </script>
             <a id="build-link" target="_blank">
                 <div id="build-name" class="subtitle"></div>
             </a>

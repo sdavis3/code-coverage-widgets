@@ -1,7 +1,7 @@
 # Code Coverage Dashboard Widgets
-This repository contains a collection of [Visual Studio Team Services (VSTS)](https://www.visualstudio.com/en-us/products/visual-studio-team-services-vs.aspx) and Team Foundation Services (TFS) dashboard widgets that can be used to extract unit test code coverage metrics right into your VSTS/TFS dashboard.
+This repository contains a collection of [Azure DevOps](https://dev.azure.com) and Team Foundation Services (TFS) dashboard widgets that can be used to extract unit test code coverage metrics right into your dashboards.
 
-NOTE: This works with Visual Studio Team Services and Team Foundation Server. However, Microsoft requires TFS 2015 Update 3 or higher for folks using Team Foundation Server.
+NOTE: This works with Azure DevOps and Team Foundation Server. However, Microsoft requires TFS 2015 Update 3 or higher for folks using Team Foundation Server.
 
 ![](img/preview1.png)
 

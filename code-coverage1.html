@@ -37,8 +37,7 @@
                         }
                         
                         // Output diagnostics info to console
-                        console.log('projectId = ' + projectId);
-                        console.log('settings.buildDefinition = ' + settings.buildDefinition);
+                        console.log('settings.buildDefinition: ' + settings.buildDefinition);
                         
                         if (parseInt(settings.buildDefinition) > 0) {
                             // Get most recent successful build details
@@ -52,7 +51,7 @@
                                         var buildWeb = query2[0]._links.web.href
 
                                         // Output diagnostics info to console
-                                        console.log('buildId = ' + buildId);
+                                        console.log('buildId: ' + buildId);
 
                                         // Get code coverage summary for most recent build
                                         TFS_TestMgmt_WebApi.getClient().getCodeCoverageSummary(projectId, buildId)
@@ -60,7 +59,7 @@
                                                 // Evaluate for where there is no coverage data                                        
                                                 if (query3.coverageData[0]) {
                                                     // Output diagnostics info to console
-                                                    console.log('coverageData found.');
+                                                    console.log('event: coverageData found');
                                                     // Filter for selected coverage measurement
                                                     var coverageMeasurement = "";
                                                     if (!settings || !settings.coverageMeasurement) {
@@ -78,11 +77,18 @@
                                                     var totalMeasurement = 0;
                                                     var coveredMeasurement = 0;
                                                     var coveragePct = 0;
+                                                    var deltaMeasurement = 0;
                                                     $.each(coverageData, function(key, value) {
                                                         totalMeasurement += value.total;
                                                         coveredMeasurement += value.covered;
+                                                        deltaMeasurement += value.delta;
+                                                        // Output diagnostics info to console
+                                                        console.log('event: delta found');
                                                     });
-                                                                                            
+                                                    
+                                                    // Output diagnostics info to console
+                                                    console.log('deltaMeasurement: ' + deltaMeasurement);
+
                                                     // Calculate code coverage percentage
                                                     // This check avoids divide by zero error
                                                     if (totalMeasurement > 0) {
@@ -109,6 +115,13 @@
                                                         // Use the default percent label
                                                         $("#percent-label").text("Percent");
                                                     }
+                                                    var percentLabelString = $("#percent-label").text();
+
+                                                    // Evaluate for delta display
+                                                    if (settings && settings.checkOptionDelta == true) {
+                                                        // Add the delta to the percent label
+                                                        $("#percent-label").text(percentLabelString + " (" + deltaMeasurement + "%)");
+                                                    }
 
                                                     $("div.big-count").text(coveragePct);
                                                     $("div.big-count").show();
@@ -120,7 +133,7 @@
                                                 }
                                                 else {
                                                     // Output diagnostics info to console
-                                                    console.log('No coverageData found.');
+                                                    console.log('event: no coverageData found');
                                                     // Set display values for no coverage data
                                                     $("div.big-count").hide();
                                                     $("#percent-label").hide();
@@ -143,7 +156,7 @@
                                 });
                         }
 
-                        // Get a client to make REST calls to VSTS
+                        // Get a client to make REST calls
                         return TFS_Build_WebApi.getClient().getDefinition(settings.buildDefinition, projectId)
                             .then(function (query) {                              
                                 // Use the widget helper and return success as Widget Status
@@ -160,7 +173,7 @@
                             $("h2.title").text(widgetSettings.name);
 
                             // Output diagnostics info to console
-                            console.log('event: load');
+                            console.log('event: load called');
 
                             return getBuildBuildInfo(widgetSettings);
                         },
@@ -169,7 +182,7 @@
                             $("h2.title").text(widgetSettings.name);
                             
                             // Output diagnostics info to console
-                            console.log('event: reload');
+                            console.log('event: reload called');
 
                             return getBuildBuildInfo(widgetSettings);
                         }

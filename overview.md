@@ -1,7 +1,10 @@
-#Code Coverage Dashboard Widgets#
+#Code Coverage Dashboard Widgets
 * NOTE: This works with Azure DevOps and Azure DevOps Server (Team Foundation Server). However, Microsoft requires TFS 2015 Update 3 or higher for folks using Azure DevOps Server (Team Foundation Server).
 
 ## Release Notes
+* 1.0.272
+    * Added configuration option to display delta of previous build's coverage.
+    * Updated logo and screenshots.
 * 1.0.219
     * Fixed issues where widget would not render properly.
 * 1.0.195

@@ -22,6 +22,7 @@
                     var $decimalPlacesDropdown = $("#decimal-places-dropdown");
                     var $checkOptionBuildName = $("#check-option-build-name");
                     var $checkOptionMeasurementName = $("#check-option-measurement-name");
+                    var $checkOptionDelta = $("#check-option-delta");
 
                     return {
                         load: function (widgetSettings, widgetConfigurationContext) {
@@ -94,6 +95,15 @@
                                 $checkOptionMeasurementName.prop('checked', false);
                             }
 
+                            // If show delta has been previously selected, set the checkbox value
+                            if (settings && settings.checkOptionDelta == true) {
+                                $checkOptionDelta.prop('checked', true);
+                            }
+                            // Otherwise, mark the box as unchecked
+                            else {
+                                $checkOptionDelta.prop('checked', false);
+                            }
+
                             // If a build definition change has been made, prepare to persist the new values
                             $buildDefinitionDropdown.on("change", function () {
                                 // Output diagnostics info to console
@@ -105,7 +115,8 @@
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         decimalPlaces: $decimalPlacesDropdown.val(),
                                         checkOptionBuildName: $checkOptionBuildName.prop('checked'),
-                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked')
+                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked'),
+                                        checkOptionDelta: $checkOptionDelta.prop('checked')
                                     })
                                 };
                                 var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
@@ -124,7 +135,8 @@
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         decimalPlaces: $decimalPlacesDropdown.val(),
                                         checkOptionBuildName: $checkOptionBuildName.prop('checked'),
-                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked')
+                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked'),
+                                        checkOptionDelta: $checkOptionDelta.prop('checked')
                                     })
                                 };
                                 var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
@@ -143,7 +155,8 @@
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         decimalPlaces: $decimalPlacesDropdown.val(),
                                         checkOptionBuildName: $checkOptionBuildName.prop('checked'),
-                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked')
+                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked'),
+                                        checkOptionDelta: $checkOptionDelta.prop('checked')
                                     })
                                 };
                                 var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
@@ -162,7 +175,8 @@
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         decimalPlaces: $decimalPlacesDropdown.val(),
                                         checkOptionBuildName: $checkOptionBuildName.prop('checked'),
-                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked')
+                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked'),
+                                        checkOptionDelta: $checkOptionDelta.prop('checked')
 
                                     })
                                 };
@@ -182,8 +196,28 @@
                                         coverageMeasurement: $coverageMeasurementDropdown.val(),
                                         decimalPlaces: $decimalPlacesDropdown.val(),
                                         checkOptionBuildName: $checkOptionBuildName.prop('checked'),
-                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked')
+                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked'),
+                                        checkOptionDelta: $checkOptionDelta.prop('checked')
+                                    })
+                                };
+                                var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
+                                var eventArgs = WidgetHelpers.WidgetEvent.Args(customSettings);
+                                widgetConfigurationContext.notify(eventName, eventArgs);
+                            });
 
+                            // If a show delta change has been made, prepare to persist the new values
+                            $checkOptionDelta.on("change", function () {
+                                // Output diagnostics info to console
+                                console.log('event: checkOptionDelta.change');
+
+                                var customSettings = {
+                                    data: JSON.stringify({
+                                        buildDefinition: $buildDefinitionDropdown.val(),
+                                        coverageMeasurement: $coverageMeasurementDropdown.val(),
+                                        decimalPlaces: $decimalPlacesDropdown.val(),
+                                        checkOptionBuildName: $checkOptionBuildName.prop('checked'),
+                                        checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked'),
+                                        checkOptionDelta: $checkOptionDelta.prop('checked')
                                     })
                                 };
                                 var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
@@ -204,8 +238,8 @@
                                     coverageMeasurement: $coverageMeasurementDropdown.val(),
                                     decimalPlaces: $decimalPlacesDropdown.val(),
                                     checkOptionBuildName: $checkOptionBuildName.prop('checked'),
-                                    checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked')
-
+                                    checkOptionMeasurementName: $checkOptionMeasurementName.prop('checked'),
+                                    checkOptionDelta: $checkOptionDelta.prop('checked')
                                 })
                             };
                             return WidgetHelpers.WidgetConfigurationSave.Valid(customSettings);
@@ -260,6 +294,8 @@
                     <label for="check-option-build-name">Show the name of the build</label><br/>
                     <input type="checkbox" id="check-option-measurement-name" name="check-option-measurement-name">
                     <label for="check-option-measurement-name">Show the name of the coverage measurement</label><br />
+                    <input type="checkbox" id="check-option-delta" name="check-option-delta">
+                    <label for="check-option-delta">Show the delta from previous build's coverage</label><br />
                 </fieldset>
             </div>
         </div>

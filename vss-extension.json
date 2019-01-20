@@ -3,7 +3,7 @@
     "id": "code-coverage-dashboard-widgets",
     "version": "1.0.219",
     "name": "Code Coverage Widgets",
-    "description": "A collection of dashboard widgets for displaying code coverage details in Visual Studio Team Services (VSTS) and Team Foundation Server (TFS).",
+    "description": "A collection of dashboard widgets for displaying code coverage details in Azure DevOps.",
     "publisher": "shanebdavis",
     "icons": {
         "default": "img/logo.png"
@@ -103,18 +103,10 @@
             "path": "configuration.html", "addressable": true
         },
         {
-            "path": "code-coverage2.html", "addressable": true
-        },
-        {
-            "path": "configuration2.html", "addressable": true
-        },
-        {
             "path": "img", "addressable": true
         },
         {
-            "path": "node_modules/vss-web-extension-sdk/lib",
-            "addressable": true,
-            "packagePath": "lib"
+            "path": "sdk/scripts", "addressable": true
         }
     ],
     "galleryFlags": [

@@ -1,5 +1,5 @@
 #Code Coverage Dashboard Widgets#
-* NOTE: This works with Visual Studio Team Services and Team Foundation Server. However, Microsoft requires TFS 2015 Update 3 or higher for folks using Team Foundation Server.
+* NOTE: This works with Azure DevOps and Azure DevOps Server (Team Foundation Server). However, Microsoft requires TFS 2015 Update 3 or higher for folks using Azure DevOps Server (Team Foundation Server).
 
 ## Release Notes
 * 1.0.219
